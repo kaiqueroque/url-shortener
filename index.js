@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const cors = require("cors")
+const database = require('./db/db');
 
 const app = express();
 const port = 3000;
@@ -12,25 +13,22 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cors());
 
 const shortenRoutes = require('./routes/shortenRoutes');
 app.use('/', shortenRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ message: 'oi Express!' });
+  res.json({ message: 'Olá Express!' });
 });
 
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD);
-mongoose
-  .connect(
-    `mongodb+srv://${DB_USER}:${DB_PASSWORD}@url-shortener.vzo4pe0.mongodb.net/bancodaapi?retryWrites=true&w=majority`
-  )
-  .then(() => {
-    console.log('Conectamos ao MongoDB!');
-    // app.listen(port) //Não funcionou com esse comando inserido.
-  })
-  .catch((err) => {console.log(err)})
+(async () => {
+  try {
+    await database.sync();
+  }catch(err) {
+    console.log("Erro ao sincronizar com banco de dados");
+  }
+})
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
