@@ -16,7 +16,9 @@ app.use(express.json());
 app.use(cors());
 
 const shortenRoutes = require('./routes/shortenRoutes');
+const userRoutes = require('./routes/userRoutes');
 app.use('/', shortenRoutes);
+app.use('/user', userRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Olá Express!' });
