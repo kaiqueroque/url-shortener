@@ -4,7 +4,6 @@ const cors = require("cors")
 const database = require('./db/db');
 
 const app = express();
-const port = 3000;
 
 app.use(
   express.urlencoded({
@@ -32,6 +31,6 @@ app.get('/', (req, res) => {
   }
 })
 
-app.listen(port, () => {
+app.listen(process.env.PORT ?? 3000, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
